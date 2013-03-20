@@ -4,6 +4,11 @@ FactoryGirl.define do
     sequence(:account_number){|n| "test_account_#{n}" }
   end
 
+  #factory :accounts, :class => Zuora::Objects::Account do
+  #  sequence(:name){|n| "Test Account #{n}"}
+  #  sequence(:account_number){|n| "test_account_#{n}" }
+  #end
+
   factory :active_account, :parent => :account do
     after_create do |account|
       contact = FactoryGirl.create(:contact, :account => account)
