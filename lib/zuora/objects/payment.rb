@@ -4,7 +4,7 @@ module Zuora::Objects
     belongs_to :invoice
 
     validates_presence_of :account_id, :amount, :effective_date,
-    :status, :type
+    :payment_method_id, :status, :type
 
     validates_length_of :accounting_code, :maximum => 100, :allow_nil => true
     validates_numericality_of :amount
