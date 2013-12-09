@@ -8,8 +8,8 @@ module Zuora::Objects
 
     validates_length_of :accounting_code, :maximum => 100, :allow_nil => true
     validates_numericality_of :amount
-    validates_numericality_of :applied_credit_balance_amount
-    validates_numericality_of :applied_invoice_amount
+    validates_numericality_of :applied_credit_balance_amount, :allow_nil => true
+    validates_numericality_of :applied_invoice_amount, :allow_nil => true
     validates_length_of :auth_transaction_id, :maximum => 50, :allow_nil => true
     validates_length_of :bank_identification_number, :maximum => 6, :allow_nil => true
     validates_date_of :cancelled_on, :allow_nil => true
