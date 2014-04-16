@@ -1,5 +1,5 @@
 module Zuora::Objects
-  # All Zuora objects extend from Zuora::Objects::Base, which provide the fundemental requirements
+  # All Zuora objects extend from Zuora::Objects::Base, which provide the fundamental requirements
   # for handling creating, destroying, updating, and querying Zuora.
   class Base
     include Zuora::Attributes
@@ -37,7 +37,7 @@ module Zuora::Objects
       keys = (attributes - unselectable_attributes).map(&:to_s).map(&:zuora_camelize)
       sql = "select #{keys.join(', ')} from #{remote_name}"
 
-      result = self.connector.query(sql)
+      result = self.connector.query_all(sql)
 
       generate(result.to_hash, :query_response)
     end
@@ -99,8 +99,24 @@ module Zuora::Objects
     end
 
     def self.query(query_string)
-      result = self.connector.query(query_string)
-      generate(result.to_hash, :query_response)
+      raw_response = self.connector.query(query_string)
+      response_result = raw_response.body[:query_response][:result]
+      @records = response_result.delete(:records)
+      @metadata = response_result.merge!(:done => response_result[:done])
+      return @records
+    end
+
+    def self.query_all(query_string)
+      query(query_string)
+
+      while !@metadata[:done] && @metadata[:query_locator].present? #&& tries < max_tries
+        raw_response = self.connector.query_more(@metadata[:query_locator])
+        response_result = raw_response.body[:query_more_response][:result]
+        @records += response_result.delete(:records)
+        @metadata = response_result.merge!(:done => response_result[:done])
+      end
+
+      @records
     end
 
     # has this record not been saved?

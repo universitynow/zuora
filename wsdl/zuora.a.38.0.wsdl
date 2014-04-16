@@ -1049,6 +1049,20 @@
 					</sequence>
 				</complexType>
 			</element>
+			<element name="queryMore">
+				<complexType>
+					<sequence>
+						<element name="queryLocator" type="xs:string" />
+					</sequence>
+				</complexType>
+			</element>
+			<element name="queryMoreResponse">
+				<complexType>
+					<sequence>
+						<element name="result" type="zns:QueryResult" />
+					</sequence>
+				</complexType>
+			</element>
 			<element name="SessionHeader">
 				<complexType>
 					<sequence>
@@ -1267,6 +1281,9 @@
 	<message name="queryResponse">
 		<part name="parameters" element="zns:queryResponse" />
 	</message>
+	<message name="queryMoreResponse">
+		<part name="parameters" element="zns:queryMoreResponse" />
+	</message>
 	<message name="Header">
 		<part name="CallOptions" element="zns:CallOptions" />
 		<part name="SessionHeader" element="zns:SessionHeader" />
@@ -1331,6 +1348,13 @@
 		<operation name="query">
 			<input message="zns:queryRequest" />
 			<output message="zns:queryResponse" />
+			<fault message="zns:MalformedQueryFault" name="MalformedQueryFault" />
+			<fault message="zns:InvalidQueryLocatorFault" name="InvalidQueryLocatorFault" />
+			<fault message="zns:UnexpectedErrorFault" name="UnexpectedErrorFault" />
+		</operation>
+		<operation name="queryMore">
+			<input message="zns:queryRequest" />
+			<output message="zns:queryMoreResponse" />
 			<fault message="zns:MalformedQueryFault" name="MalformedQueryFault" />
 			<fault message="zns:InvalidQueryLocatorFault" name="InvalidQueryLocatorFault" />
 			<fault message="zns:UnexpectedErrorFault" name="UnexpectedErrorFault" />
@@ -1426,6 +1450,25 @@
 			</fault>
 		</operation>
 		<operation name="query">
+			<soap:operation soapAction="" />
+			<input>
+				<soap:header use="literal" message="zns:Header" part="SessionHeader" />
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+			<fault name="MalformedQueryFault">
+				<soap:fault name="MalformedQueryFault" use="literal" />
+			</fault>
+			<fault name="InvalidQueryLocatorFault">
+				<soap:fault name="InvalidQueryLocatorFault" use="literal" />
+			</fault>
+			<fault name="UnexpectedErrorFault">
+				<soap:fault name="UnexpectedErrorFault" use="literal" />
+			</fault>
+		</operation>
+		<operation name="queryMore">
 			<soap:operation soapAction="" />
 			<input>
 				<soap:header use="literal" message="zns:Header" part="SessionHeader" />
