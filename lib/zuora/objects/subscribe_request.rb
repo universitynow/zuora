@@ -14,7 +14,7 @@ module Zuora::Objects
     store_accessors :subscribe_options
     store_accessors :preview_options
 
-    
+
     validate do |request|
       self.validation_errors = Array.new
       self.validation_errors << request.must_have_usable(:account)
@@ -103,7 +103,7 @@ module Zuora::Objects
               sd.__send__(zns, :RatePlanData) do |rpd|
                 rpd.__send__(zns, :RatePlan) do |rp|
                   rp.__send__(ons, :ProductRatePlanId, product_rate_plan.id)
-                end                             
+                end
               end
             end unless product_rate_plans.nil?
           end
@@ -126,7 +126,7 @@ module Zuora::Objects
         subscription.id = result[:subscription_id]
         subscription.clear_changed_attributes!
         @previously_changed = changes
-        @changed_attributes.clear
+        clear_changes_information
         return result
       else
         self.errors.add(:base, result[:errors][:message])
@@ -193,7 +193,7 @@ module Zuora::Objects
         end
       end
     end
-    
+
     def generate_preview_options(builder)
       preview_options.each do |k,v|
         builder.__send__(zns, k.to_s.zuora_camelize.to_sym, v)
